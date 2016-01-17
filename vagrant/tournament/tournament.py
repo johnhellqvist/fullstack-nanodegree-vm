@@ -30,6 +30,11 @@ def deletePlayers():
 
 
 def countPlayers():
+    conn = connect()
+    c = conn.cursor()
+    c.execute("SELECT count(*) FROM players;")
+    conn.commit()
+    conn.close()
     """Returns the number of players currently registered."""
 
 
