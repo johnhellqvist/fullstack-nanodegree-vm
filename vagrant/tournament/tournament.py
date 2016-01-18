@@ -48,7 +48,7 @@ def registerPlayer(name):
     c.execute("INSERT INTO players(name) VALUES(%s);", (name,))
     c.execute("SELECT COUNT(*) FROM players;")
     count = c.fetchall()
-    print count[0][0]
+#    print count[0][0]
     conn.commit()
     conn.close()
     """Adds a player to the tournament database.
@@ -62,6 +62,13 @@ def registerPlayer(name):
 
 
 def playerStandings():
+    conn = connect()
+    c = conn.cursor()
+    c.execute("SELECT * FROM player_standings;")
+    result = c.fetchall()
+    conn.commit()
+    conn.close()
+    return result
     """Returns a list of the players and their win records, sorted by wins.
 
     The first entry in the list should be the player in first place, or a player
