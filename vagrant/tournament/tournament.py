@@ -4,6 +4,7 @@
 #
 
 import psycopg2
+import bleach
 
 
 def connect():
@@ -32,13 +33,24 @@ def deletePlayers():
 def countPlayers():
     conn = connect()
     c = conn.cursor()
-    c.execute("SELECT count(*) FROM players;")
+    c.execute("SELECT COUNT(*) FROM players;")
+    result = c.fetchall()
     conn.commit()
     conn.close()
+#   print result[0][0]
+    return result[0][0]
     """Returns the number of players currently registered."""
 
 
 def registerPlayer(name):
+    conn = connect()
+    c = conn.cursor()
+    c.execute("INSERT INTO players(name) VALUES(%s);", (name,))
+    c.execute("SELECT COUNT(*) FROM players;")
+    count = c.fetchall()
+    print count[0][0]
+    conn.commit()
+    conn.close()
     """Adds a player to the tournament database.
   
     The database assigns a unique serial id number for the player.  (This
