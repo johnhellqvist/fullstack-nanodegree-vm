@@ -28,3 +28,16 @@ CREATE VIEW games_won AS
 	ON players.id = matches.winner
 	GROUP BY id
 	ORDER BY wins desc, id;
+
+CREATE VIEW games_played AS
+	SELECT players.id, COALESCE(COUNT(matches.match_id), 0) as played 
+	FROM players LEFT JOIN matches
+	ON players.id = matches.winner OR players.id = matches.loser
+	GROUP BY id
+	ORDER BY played desc, id;
+
+CREATE VIEW player_standings AS
+	SELECT games_won.id, players.name, games_won.wins, games_played.played
+	FROM players, games_won, games_played
+	WHERE players.id = games_won.id AND players.id = games_played.id
+	ORDER BY wins desc, id;
