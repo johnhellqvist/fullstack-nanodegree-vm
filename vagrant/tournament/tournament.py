@@ -98,6 +98,21 @@ def reportMatch(winner, loser):
  
  
 def swissPairings():
+    conn = connect()
+    c = conn.cursor()
+    c.execute("SELECT * FROM player_standings;")
+    result = c.fetchall()
+    conn.commit()
+    conn.close()
+    output = []
+    for e in range(len(result)):
+        if e % 2 == 0:
+            output.append(result[e][:2])
+        else:
+            match_number = e/2
+            output[match_number] = output[match_number] + result[e][:2]
+    print output
+    return output
     """Returns a list of pairs of players for the next round of a match.
   
     Assuming that there are an even number of players registered, each player
